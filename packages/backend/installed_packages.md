@@ -8,6 +8,7 @@
 | `dotenv` | `^17.4.2` | Loads environment variables from a `.env` file into `process.env` |
 | `passport` | `^0.7.0` | Simple, unobtrusive authentication middleware for Node.js |
 | `passport-google-oauth20` | `^2.0.0` | Passport strategy for authenticating with Google using the OAuth 2.0 API |
+| `passport-github2` | `^0.1.12` | Passport strategy for authenticating with GitHub using the OAuth 2.0 API |
 | `google-auth-library` | `^11.0.2` | Google Auth library for Node.js (OAuth2, Google Sign-In verification) |
 | `jsonwebtoken` | `^9.0.3` | Implementation of JSON Web Tokens (JWT) for authentication & authorization |
 | `mongoose` | `^9.9.2` | MongoDB object modeling and schema management library |
