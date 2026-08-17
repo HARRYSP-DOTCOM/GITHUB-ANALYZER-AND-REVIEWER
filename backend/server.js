@@ -32,19 +32,28 @@ app.get("/", (req, res) => {
 });
 
 // Google OAuth
-app.get(
-    "/auth/google",
+app.get("/auth/google", (req, res, next) => {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        return res.status(500).json({
+            error: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in backend/.env",
+        });
+    }
     passport.authenticate("google", {
         scope: ["profile", "email"],
-    })
-);
+    })(req, res, next);
+});
 
 app.get(
     "/auth/google/callback",
-    passport.authenticate("google", {
-        session: false,
-        failureRedirect: "http://localhost:5173/login",
-    }),
+    (req, res, next) => {
+        if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+            return res.redirect("http://localhost:5173/login?error=google_not_configured");
+        }
+        passport.authenticate("google", {
+            session: false,
+            failureRedirect: "http://localhost:5173/login",
+        })(req, res, next);
+    },
     (req, res) => {
         const token = jwt.sign(
             {
@@ -54,7 +63,7 @@ app.get(
                 name: req.user.name,
                 picture: req.user.picture,
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || "fallback_secret_key",
             {
                 expiresIn: "7d",
             }
@@ -67,19 +76,28 @@ app.get(
 );
 
 // GitHub OAuth
-app.get(
-    "/auth/github",
+app.get("/auth/github", (req, res, next) => {
+    if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+        return res.status(500).json({
+            error: "GitHub OAuth is not configured. Please set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in backend/.env",
+        });
+    }
     passport.authenticate("github", {
         scope: ["user:email", "repo"],
-    })
-);
+    })(req, res, next);
+});
 
 app.get(
     "/auth/github/callback",
-    passport.authenticate("github", {
-        session: false,
-        failureRedirect: "http://localhost:5173/login",
-    }),
+    (req, res, next) => {
+        if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+            return res.redirect("http://localhost:5173/login?error=github_not_configured");
+        }
+        passport.authenticate("github", {
+            session: false,
+            failureRedirect: "http://localhost:5173/login",
+        })(req, res, next);
+    },
     (req, res) => {
         const token = jwt.sign(
             {
@@ -91,7 +109,7 @@ app.get(
                 picture: req.user.picture,
                 accessToken: req.user.accessToken,
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || "fallback_secret_key",
             {
                 expiresIn: "7d",
             }
