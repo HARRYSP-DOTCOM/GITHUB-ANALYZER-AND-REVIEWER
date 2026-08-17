@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 function App() {
+  useEffect(() => {
+    document.title = "GIT.AI";
+  }, []);
+
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5000/auth/google";
   };
@@ -9,7 +15,7 @@ function App() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", fontFamily: "system-ui, sans-serif" }}>
-      <h1>GitHub Analyzer & Reviewer</h1>
+      <h1>GIT.AI</h1>
       <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "20px" }}>
         <button
           onClick={handleGoogleLogin}
